@@ -1,44 +1,38 @@
-<?php 
- session_start();
+<?php
+session_start();
 require_once 'conexao.php';
 
-//Garante que o usuario esteja logado
-if($_SESSION['perfil']!=1 && $_SESSION['perfil']!=2){
-    echo "<script>alert('Acesso negado');window.location.href='principal.php';</script>";
+//Verifica se o usuario tem permissão
+//supondo que o perfil 1 seja o ADM
+if($_SESSION['perfil']!= 1 && $_SESSION['perfil']!=2){
+    echo "<script>alert('Acesso Negado');window.location.href='principal.php';</script>";
     exit();
-
-
-
 }
 
-// inicialização a variavel para evitar erros 
-$usuarios = [];
+// Inicializa a variavel para evitar errors
+$usuario = [];
 
-// se o formulario for enviado, busca o usuario pelo id ou nome
+// Se o formulario for enviado, busca o usuario pelo id ou nome
 
-if ($_SERVER["REQUEST_METHOD"]=="POST" && !empty($_POST['busca'])){
+if($_SERVER['REQUEST_METHOD']=='POST' && !empty($_POST['busca'])){
     $busca = trim($_POST['busca']);
 
-    // VERIFICA SE A  BUSCA É UM NUMERO (ID) OU UM NOME
-
+    // Verifica se a busca é um numero(id) ou um nome
     if(is_numeric($busca)){
         $sql = "SELECT * FROM usuario WHERE id_usuario = :busca ORDER BY nome ASC";
-        $stmt = $pdo->prepare($sql);
-        $stmt->bindParam(':busca', $busca,PDO::PARAM_INT);
-
+        $stmt= $pdo->prepare($sql);
+        $stmt->bindparam(':busca',$busca,PDO::PARAM_INT);
     }else{
-        $sql="SELECT * FROM usuario WHERE nome LIKE:busca_nome ORDER BY nome ASC";
-        $stmt = $pdo->prepare($sql);
-        $stmt->bindValue(':busca_nome', "%busca%",PDO::PARAM_STR);
+        $sql="SELECT * FROM usuario WHERE nome like :busca_nome ORDER BY nome ASC";
+        $stmt= $pdo->prepare($sql);
+        $stmt->bindValue(':busca_nome',"%$busca",PDO::PARAM_STR);
     }
 }else{
     $sql="SELECT * FROM usuario ORDER BY nome ASC";
-        $stmt = $pdo->prepare($sql);
+    $stmt= $pdo->prepare($sql);
 }
-
 $stmt->execute();
 $usuarios = $stmt->fetchALL(PDO::FETCH_ASSOC);
-
 ?>
 
 <!DOCTYPE html>
@@ -77,19 +71,19 @@ $usuarios = $stmt->fetchALL(PDO::FETCH_ASSOC);
             <th>Ações </th>
 </tr>
 
-<?php foreach($usuarios as $usuarios):?>
+<?php foreach($usuarios as $usuario):?>
     <tr>
-        <td><?=htmlspecialchars($usuarios['id_usuario'])?></td>
+        <td><?=htmlspecialchars($usuario['id_usuario'])?></td>
 
-        <td><?=htmlspecialchars($usuarios['nome'])?></td>
+        <td><?=htmlspecialchars($usuario['nome'])?></td>
 
-        <td><?=htmlspecialchars($usuarios['email'])?></td>
+        <td><?=htmlspecialchars($usuario['email'])?></td>
 
-        <td><?=htmlspecialchars($usuarios['id_perfil'])?></td>
+        <td><?=htmlspecialchars($usuario['id_perfil'])?></td>
         <td>
-            <a href="alterar_usuario.php?id=<?=htmlspecialchars($usuarios['id_usuario'])?>">Alterar</a>
+            <a href="alterar_usuario.php?id=<?=htmlspecialchars($usuario['id_usuario'])?>">Alterar</a>
 
-            <a href="excluir_usuario.php?id=<?=htmlspecialchars($usuarios['id_usuario'])?>" onclick="return confirm('Tem certeza que deseka excluir esse usuario')">excluir</a>
+            <a href="excluir_usuario.php?id=<?=htmlspecialchars($usuario['id_usuario'])?>" onclick="return confirm('Tem certeza que deseka excluir esse usuario')">excluir</a>
         </td>
 
 
