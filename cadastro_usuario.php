@@ -1,6 +1,7 @@
 <?php 
  session_start();
 require_once 'conexao.php';
+require_once 'menu_dropdow.php';
 
 //Garante que o usuario esteja logado
 if($_SESSION['perfil']!=1){

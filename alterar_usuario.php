@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once 'conexao.php';
+require_once 'menu_dropdow.php';
 
 //VERIFICA SE O USUÁRIO TEM PERMISSÃO DE ADM
 
