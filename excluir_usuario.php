@@ -44,6 +44,33 @@ if(isset($_GET['id']) && is_numeric($_GET['id'])){
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        text-align: center; /* centraliza h2 e links */
+    }
+
+    table {
+        margin: 20px auto; /* centraliza a tabela */
+        border-collapse: collapse;
+    }
+
+    th, td {
+        padding: 8px 12px;
+    }
+
+    a {
+        text-decoration: none;
+        color: blue;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+</style>
+
+
     <h2>Excluir Usuario</h2>
     <?php if (!empty($usuarios)):?>
         <table border="1">

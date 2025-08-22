@@ -46,24 +46,57 @@ $usuarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h2>Lista de usuários</h2>
-<!--FORMULÁRIO PARA BUSCAR USUARIOS-->
-    <form action="buscar_usuario.php" method="POST">
-        <label for="busca">Digite o id ou NOME(opcional):</label>
-        <input type="text" id="busca" name="busca">
-        <button type="submit">Buscar</button>
-    </form>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        text-align: center;
+    }
 
-    <?php if(!empty($usuarios)): ?>
-        <table border="1">
-            <tr>
-                <th>ID</th>
-                <th>Nome</th>
-                <th>Email</th>
-                <th>Perfil</th>
-                <th>Ações</th>
-            </tr>
+    table {
+        margin: 20px auto; /* centraliza a tabela */
+        border-collapse: collapse;
+    }
 
+    th, td {
+        padding: 8px 12px;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+
+    a {
+        text-decoration: none;
+        color: blue;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+
+    form {
+        margin-bottom: 20px;
+    }
+</style>
+
+<h2>Lista de usuários</h2>
+
+<form action="buscar_usuario.php" method="POST">
+    <label for="busca">Digite o id ou NOME(opcional):</label>
+    <input type="text" id="busca" name="busca">
+    <button type="submit">Buscar</button>
+</form>
+
+<?php if(!empty($usuarios)): ?>
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Email</th>
+            <th>Perfil</th>
+            <th>Ações</th>
+        </tr>
         <?php foreach($usuarios as $usuario): ?>
             <tr>
                 <td><?=htmlspecialchars($usuario['id_usuario'])?></td>
@@ -72,16 +105,17 @@ $usuarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <td><?=htmlspecialchars($usuario['id_perfil'])?></td>
                 <td>
                     <a href="alterar_usuario.php?id=<?=htmlspecialchars($usuario['id_usuario'])?>">Alterar</a>
-                    </br>
+                    <br>
                     <a href="excluir_usuario.php?id=<?= htmlspecialchars($usuario['id_usuario']) ?>" onclick="return confirm('Tem certeza que deseja excluir este usuário?')">Excluir</a>
                 </td>
             </tr>
-            <?php endforeach; ?>
-        </table>
-       <?php else: ?>
-            <p> Nenhum usuário encontrado.</p>
-        <?php endif; ?>
+        <?php endforeach; ?>
+    </table>
+<?php else: ?>
+    <p>Nenhum usuário encontrado.</p>
+<?php endif; ?>
 
-        <a href="principal.php">Voltar</a>
+<a href="principal.php">Voltar</a>
+
 </body>
 </html>
