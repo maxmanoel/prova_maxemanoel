@@ -79,5 +79,9 @@ $opcoes_menu = $permissoes[$id_perfil];
     <?php endforeach;?>
     </ul>
 </nav>
+
+<address>
+            | Max Emanoe / estudante / desenvolvimento 
+            </address>
 </body>
 </html>
