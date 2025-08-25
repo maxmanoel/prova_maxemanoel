@@ -17,7 +17,7 @@ function applyMask(el) {
     if (el.value !== masked) el.value = masked;
 }
 
-// Exemplo de uso: aplicando a cada tecla digitada
+
 document.querySelectorAll('[data-mask="nome"]').forEach(input => {
     input.addEventListener('input', () => applyMask(input));
 });

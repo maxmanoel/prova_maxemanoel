@@ -151,7 +151,7 @@ if ($_SERVER["REQUEST_METHOD"]=="POST") {
             font-style: normal;
         }
     </style>
-    <script src="js/masks.js"></script>
+    <script src="js/masks.js" defer></script>
 </head>
 <body>
 
@@ -169,7 +169,8 @@ if ($_SERVER["REQUEST_METHOD"]=="POST") {
         <input type="hidden" name="id_usuario" value="<?=htmlspecialchars($usuario['id_usuario'])?>">
 
         <label for="nome">Nome:</label>
-        <input type="text" id="nome" name="nome" value="<?=htmlspecialchars($usuario['nome'])?>" required>
+        <input type="text" id="nome" name="nome" value="<?=htmlspecialchars($usuario['nome'])?>" required data-mask="nome">
+
 
         <label for="email">Email:</label>
         <input type="email" id="email" name="email" value="<?=htmlspecialchars($usuario['email'])?>" required>
