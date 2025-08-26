@@ -39,4 +39,162 @@ try {
     echo "<script>alert('Erro ao buscar produtos: " . addslashes($e->getMessage()) . "');</script>";
 }
 ?>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buscar Produto</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f4f8;
+            padding: 20px;
+            text-align: center;
+            color: #333;
+        }
+
+        h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        form {
+            margin-bottom: 30px;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            width: 250px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        input[type="text"]:focus {
+            border-color: #2980b9;
+        }
+
+        button {
+            padding: 10px 15px;
+            border: none;
+            background-color: #2980b9;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        button:hover {
+            background-color: #1c5980;
+        }
+
+        table {
+            margin: auto;
+            border-collapse: separate;
+            border-spacing: 0;
+            width: 90%;
+            max-width: 900px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #2980b9;
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f7f9fb;
+        }
+
+        tr:hover {
+            background-color: #d6eaf8;
+            transition: 0.2s;
+        }
+
+        a {
+            display: inline-block;
+            margin: 5px 0;
+            padding: 5px 10px;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            background-color: #27ae60;
+            transition: background-color 0.2s ease;
+        }
+
+        a:hover {
+            background-color: #1e8449;
+        }
+
+        a.delete {
+            background-color: #c0392b;
+        }
+
+        a.delete:hover {
+            background-color: #922b21;
+        }
+
+        address {
+            margin-top: 30px;
+            font-size: 0.9em;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+<h2>Lista de Produtos</h2>
+
+<form action="buscar_produto.php" method="POST">
+    <label for="busca">Digite o ID ou NOME do Produto (opcional):</label>
+    <input type="text" id="busca" name="busca">
+    <button type="submit">Buscar</button>
+</form>
+
+<?php if (!empty($produtos)): ?>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Descrição</th>
+            <th>Quantidade</th>
+            <th>Valor Unitário</th>
+            <th>Ações</th>
+        </tr>
+        <?php foreach ($produtos as $produto): ?>
+            <tr>
+                <td><?= htmlspecialchars($produto['id_produto']) ?></td>
+                <td><?= htmlspecialchars($produto['nome_prod']) ?></td>
+                <td><?= htmlspecialchars($produto['descricao']) ?></td>
+                <td><?= htmlspecialchars($produto['qtde']) ?></td>
+                <td><?= htmlspecialchars($produto['valor_unit']) ?></td>
+                <td>
+                    <a href="alterar_produto.php?id=<?= htmlspecialchars($produto['id_produto']) ?>">Alterar</a>
+                    <br>
+                    <a href="excluir_produto.php?id=<?= htmlspecialchars($produto['id_produto']) ?>" class="delete" onclick="return confirm('Tem certeza que deseja excluir este produto?')">Excluir</a>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+    </table>
+<?php else: ?>
+    <p>Nenhum produto encontrado.</p>
+<?php endif; ?>
+
+<a href="principal.php">Voltar</a>
+
+<address>
+    | Max Emanoe / estudante / desenvolvimento 
+</address>
+
+</body>
+</html>
+
 
