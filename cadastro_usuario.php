@@ -132,7 +132,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         font-style: normal;
     }
 </style>
-<script src="js/masks.js" defer></script>
+<script src="masks.js" defer></script>
 </head>
 <body>
 
