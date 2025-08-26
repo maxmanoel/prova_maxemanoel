@@ -31,7 +31,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST["busca"])) {
     $stmt = $pdo->prepare($sql);
 }
 
-// Executa a consulta
+// Executa a consulta...
 try {
     $stmt->execute();
     $produtos = $stmt->fetchAll(PDO::FETCH_ASSOC);
