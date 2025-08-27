@@ -55,5 +55,5 @@ try {
 </style>
 
 <address>
-    | Max Emanoel / estudante / desenvolvimento 
+    | Max Emanoe / estudante / desenvolvimento 
 </address>
