@@ -4,7 +4,7 @@ require_once 'conexao.php';
 
 //Garante que o usuario esteja logado
 if(!isset($_SESSION['id_usuario'])){
-    echo "<script>alert('Acesso negado'); window.location.href='login.php';</script>";
+    echo "<script>alert('Acesso negado'); window.location.href='index.php';</script>";
     exit();
 }
 
@@ -30,7 +30,7 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
 
     if($stmt->execute()){
         session_destroy(); //Finaliza a Sessão
-        echo "<script>alert('Senha alterada com sucesso! Faça login novamente'); window.location.href='login.php';</script>";
+        echo "<script>alert('Senha alterada com sucesso! Faça login novamente'); window.location.href='index.php';</script>";
     }else {
         "<script>alert('Erro ao alterar a senha');';</script>";
     }
