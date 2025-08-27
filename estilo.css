@@ -1,5 +1,5 @@
 
-    body {
+    /*body {
         font-family: Arial, sans-serif;
         background-color: #f4f4f4;
         text-align: center;
@@ -7,7 +7,7 @@
 
     table {
         margin: 20px auto; /* centraliza a tabela */
-        border-collapse: collapse;
+     /*   border-collapse: collapse;
     }
 
     th, td {
@@ -28,5 +28,5 @@
     }
 
     form {
-        margin-bottom: 20px;
+        margin-bottom: 20px;//
     }
