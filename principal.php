@@ -81,7 +81,7 @@ $opcoes_menu = $permissoes[$id_perfil];
 </nav>
 
 <address>
-            | Max Emanoe / estudante / desenvolvimento 
-            </address>
+    | Max Emanoel / estudante / desenvolvimento 
+</address>
 </body>
 </html>

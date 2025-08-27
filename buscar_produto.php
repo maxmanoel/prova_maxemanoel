@@ -191,7 +191,7 @@ try {
 <a href="principal.php">Voltar</a>
 
 <address>
-    | Max Emanoe / estudante / desenvolvimento 
+    | Max Emanoel / estudante / desenvolvimento 
 </address>
 
 </body>

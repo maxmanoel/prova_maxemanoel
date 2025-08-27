@@ -159,7 +159,7 @@ if(isset($_GET['id']) && is_numeric($_GET['id'])){
 <a href="principal.php" class="back-link">Voltar</a>
 
 <address>
-    | Max Emanoe / estudante / desenvolvimento 
+    | Max Emanoel / estudante / desenvolvimento 
 </address>
 
 </body>

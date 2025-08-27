@@ -207,7 +207,7 @@ $usuarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <a href="principal.php" class="back-link">Voltar</a>
 
 <address>
-    | Max Emanoe / estudante / desenvolvimento 
+    | Max Emanoel / estudante / desenvolvimento 
 </address>
 
 </body>
