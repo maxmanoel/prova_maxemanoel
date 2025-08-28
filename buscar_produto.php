@@ -151,7 +151,7 @@ try {
     </style>
 </head>
 <body>
-<h2>Lista de Produtos</h2>
+<h2>Busca Produtos</h2>
 
 <form action="buscar_produto.php" method="POST">
     <label for="busca">Digite o ID ou NOME do Produto (opcional):</label>

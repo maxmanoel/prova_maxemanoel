@@ -1,114 +1,179 @@
 <?php
 session_start();
 require_once 'conexao.php';
+require_once 'menu_dropdow.php';
 
-// Verifica perfil de acesso
-if ($_SESSION['perfil'] != 1 && $_SESSION['perfil'] != 2) {
-    echo "<script>alert('Acesso Negado!'); window.location.href='principal.php';</script>";
+// VERIFICA SE O USUÁRIO TEM PERMISSÃO DE ADM
+if($_SESSION['perfil'] != 1){
+    echo "<script>alert('Acesso Negado!');window.location.href='principal.php';</script>";
     exit();
 }
 
-// Verifica se o ID do produto foi passado via GET
-if (!isset($_GET['id']) || empty($_GET['id'])) {
-    echo "<script>alert('Produto não informado!'); window.location.href='buscar_produto.php';</script>";
-    exit();
-}
+// INICIALIZA AS VARIAVEIS
+$produto = null;
 
-$id_produto = (int)$_GET['id'];
-
-// Busca o produto no banco
-$sql = "SELECT * FROM produto WHERE id_produto = :id";
-$stmt = $pdo->prepare($sql);
-$stmt->bindParam(':id', $id_produto, PDO::PARAM_INT);
-$stmt->execute();
-$produto = $stmt->fetch(PDO::FETCH_ASSOC);
-
-if (!$produto) {
-    echo "<script>alert('Produto não encontrado!'); window.location.href='buscar_produto.php';</script>";
-    exit();
-}
-
-// Atualiza o produto se o formulário for enviado
+// SE O FORMULÁRIO FOR ENVIADO, BUSCA O PRODUTO PELO ID OU PELO NOME
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $nome = trim($_POST['nome']);
-    $descricao = trim($_POST['descricao']);
-    $qtde = (int)$_POST['qtde'];
-    $valor_unit = str_replace(',', '.', str_replace('.', '', $_POST['valor_unit'])); // remove pontos e converte vírgula em ponto
+    if (!empty($_POST['busca_produto'])) {
+        $busca = trim($_POST["busca_produto"]);
 
-    // Validações básicas
-    if (strlen($nome) < 2) {
-        echo "<script>alert('O nome do produto deve ter pelo menos 2 caracteres.');</script>";
-    } elseif ($qtde < 0) {
-        echo "<script>alert('A quantidade não pode ser negativa.');</script>";
-    } elseif ($valor_unit <= 0) {
-        echo "<script>alert('O valor unitário deve ser maior que zero.');</script>";
-    } else {
-        $sql_update = "UPDATE produto 
-                       SET nome_prod = :nome, 
-                           descricao = :descricao, 
-                           qtde = :qtde, 
-                           valor_unit = :valor 
-                       WHERE id_produto = :id";
+        if(is_numeric($busca)) {
+            $sql = "SELECT * FROM produto WHERE id_produto = :busca";
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindParam(':busca', $busca, PDO::PARAM_INT);
+        } else {
+            $sql = "SELECT * FROM produto WHERE nome_prod LIKE :busca_nome";
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindValue(':busca_nome', "%$busca%", PDO::PARAM_STR);
+        }
+        $stmt->execute();
+        $produto = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        $stmt_update = $pdo->prepare($sql_update);
-        $stmt_update->bindParam(':nome', $nome);
-        $stmt_update->bindParam(':descricao', $descricao);
-        $stmt_update->bindParam(':qtde', $qtde, PDO::PARAM_INT);
-        $stmt_update->bindParam(':valor', $valor_unit);
-        $stmt_update->bindParam(':id', $id_produto, PDO::PARAM_INT);
-
-        try {
-            if ($stmt_update->execute()) {
-                echo "<script>alert('Produto alterado com sucesso!'); window.location.href='buscar_produto.php';</script>";
-                exit();
-            } else {
-                echo "<script>alert('Erro ao alterar o produto.');</script>";
-            }
-        } catch (PDOException $e) {
-            echo "<script>alert('Erro: " . addslashes($e->getMessage()) . "');</script>";
+        // SE O PRODUTO NÃO FOR ENCONTRADO, EXIBE UM ALERTA
+        if(!$produto){
+            echo "<script>alert('Produto não encontrado!');</script>";
         }
     }
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Alterar Produto</title>
-<style>
-    body { font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px; }
-    h2 { text-align: center; }
-    form { max-width: 500px; margin: auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px #ccc; }
-    label { display: block; margin-top: 15px; }
-    input, textarea, button { width: 100%; padding: 10px; margin-top: 5px; border-radius: 4px; border: 1px solid #ccc; }
-    button { cursor: pointer; margin-top: 15px; }
-    a { display: block; text-align: center; margin-top: 20px; }
-</style>
-<!-- Chama o JS externo das máscaras -->
-<script src="js/masks.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alterar Produto</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f4f8;
+            color: #333;
+            text-align: center;
+            padding: 20px;
+        }
+
+        h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        form {
+            margin: 20px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            max-width: 500px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin: 12px 0 5px;
+            font-weight: 500;
+        }
+
+        input[type="text"],
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #2980b9;
+        }
+
+        button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 15px;
+            margin-right: 10px;
+            transition: background-color 0.2s ease;
+            color: white;
+        }
+
+        button[type="submit"] {
+            background-color: #2980b9;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #1c5980;
+        }
+
+        button[type="reset"] {
+            background-color: #c0392b;
+        }
+
+        button[type="reset"]:hover {
+            background-color: #922b21;
+        }
+
+        a.back-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 8px 15px;
+            background-color: #2980b9;
+            color: white;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.2s ease;
+        }
+
+        a.back-link:hover {
+            background-color: #1c5980;
+        }
+
+        address {
+            margin-top: 30px;
+            font-size: 0.9em;
+            color: #7f8c8d;
+            font-style: normal;
+        }
+    </style>
+    <script src="masks.js"></script>
 </head>
 <body>
+
 <h2>Alterar Produto</h2>
 
-<form action="alterar_produto.php?id=<?= htmlspecialchars($produto['id_produto']) ?>" method="POST">
-    <label for="nome">Nome do Produto</label>
-    <input type="text" id="nome" name="nome" value="<?= htmlspecialchars($produto['nome_prod'] ?? '') ?>" required>
-
-    <label for="descricao">Descrição</label>
-    <textarea id="descricao" name="descricao" required><?= htmlspecialchars($produto['descricao_prod'] ?? '') ?></textarea>
-
-    <label for="qtde">Quantidade</label>
-    <input type="text" id="qtde" name="qtde" value="<?= htmlspecialchars($produto['qtde'] ?? '') ?>" required>
-
-    <label for="valor_unit">Valor Unitário</label>
-    <input type="text" id="valor_unit" name="valor_unit" value="<?= htmlspecialchars($produto['valor_unit'] ?? '') ?>" required>
-
-    <button type="submit">Salvar Alterações</button>
-    <button type="reset">Cancelar</button>
+<form action="alterar_produto.php" method="POST">
+    <label for="busca_produto">Digite o ID ou NOME do produto:</label>
+    <input type="text" id="busca_produto" name="busca_produto" required>
+    <button type="submit">Buscar</button>
 </form>
 
-<a href="buscar_produto.php">Voltar</a>
+<?php if ($produto): ?>
+    <form action="processa_alteracao_produto.php" method="POST">
+        <input type="hidden" name="id_produto" value="<?=htmlspecialchars($produto['id_produto'])?>">
+
+        <label for="nome_prod">Nome:</label>
+        <input type="text" id="nome_prod" name="nome_prod" value="<?=htmlspecialchars($produto['nome_prod'])?>" required>
+
+        <label for="descricao">Descrição:</label>
+        <input type="text" id="descricao" name="descricao" value="<?=htmlspecialchars($produto['descricao'])?>" required>
+
+        <label for="qtde">Quantidade:</label>
+        <input type="text" id="qtde" name="qtde" value="<?=htmlspecialchars($produto['qtde'])?>" required>
+
+        <label for="valor_unit">Valor Unitário:</label>
+        <input type="text" step="0.01" id="valor_unit" name="valor_unit" value="<?=htmlspecialchars($produto['valor_unit'])?>" required>
+
+        
+        <button type="submit">Alterar</button>
+        <button type="reset">Cancelar</button>
+    </form>
+<?php endif; ?>
+
+<a href="principal.php" class="back-link">Voltar</a>
+
+<address>
+    | Max Emanoel / estudante / desenvolvimento 
+</address>
+
 </body>
 </html>
